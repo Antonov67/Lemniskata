@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Line2D;
 
 class MovingClock extends JComponent implements ActionListener {
 
@@ -87,6 +88,12 @@ class MovingClock extends JComponent implements ActionListener {
         Polygon lemkiskata = new Polygon(xLemn,yLemn,xLemn.length); // создаем лемнискату
         g2d.setColor(colorLem); // задаем ее цвет
         g2d.setStroke(new BasicStroke(2)); // толщина линий
+        // вертикальная ось
+        Line2D line2D = new Line2D.Double(212, 300, 212, 100);
+        g2d.draw(line2D);
+        //подписи осей
+        g2d.drawString("y", 220, 110);
+        g2d.drawString("x", 390, 215);
         g2d.draw(lemkiskata); // помещаем ее на холст
 
 
