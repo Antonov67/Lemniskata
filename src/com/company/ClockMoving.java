@@ -9,6 +9,11 @@ class MovingClock extends JComponent implements ActionListener {
 
     private double scale;
     private Color colorLem, colorClock;
+
+    public void setColorClock(Color colorClock) {
+        this.colorClock = colorClock;
+    }
+
     private Timer timer;
 
     private int radius;
