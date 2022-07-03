@@ -11,6 +11,8 @@ class MovingClock extends JComponent implements ActionListener {
     private double scale;
     private Color colorLem, colorClock;
 
+    private int scaleLine = 0;
+
     public void setColorClock(Color colorClock) {
         this.colorClock = colorClock;
     }
@@ -120,10 +122,33 @@ class MovingClock extends JComponent implements ActionListener {
             x = a;
         }
         // массивы координат точек часов
-        int xPoly[] = {xPol-10,xPol+10, xPol, xPol-10, xPol+10, xPol};
-        int yPoly[] = {y-20, y-20, y, y+20, y+20, y};
-        Polygon polygon = new Polygon(xPoly,yPoly,xPoly.length);
-        g2d.setColor(colorClock);
-        g2d.draw(polygon);
+//        int xPoly[] = {xPol-10,xPol+10, xPol, xPol-10, xPol+10, xPol};
+//        int yPoly[] = {y-20, y-20, y, y+20, y+20, y};
+
+
+        if (scaleLine%20 <= 9){
+            int xPoly[] = {xPol-scaleLine%20-20,xPol+20+scaleLine%20, xPol, xPol-scaleLine%20-20, xPol+20+scaleLine%20, xPol};
+            int yPoly[] = {y-scaleLine%20-10, y-scaleLine%20-10, y, y+scaleLine%20+10, y+scaleLine%20+10, y};
+            Polygon polygon = new Polygon(xPoly,yPoly,xPoly.length);
+            g2d.setColor(colorClock);
+            g2d.draw(polygon);
+        }else {
+            int xPoly[] = {xPol-38+scaleLine%20,xPol+38-scaleLine%20, xPol, xPol-38+scaleLine%20, xPol+38-scaleLine%20, xPol};
+            int yPoly[] = {y-28+scaleLine%20, y-28+scaleLine%20, y, y+28-scaleLine%20, y+28-scaleLine%20, y};
+            Polygon polygon = new Polygon(xPoly,yPoly,xPoly.length);
+            g2d.setColor(colorClock);
+            g2d.draw(polygon);
+        }
+
+
+
+
+        if (x % 10 == 4){
+            scaleLine++;
+        }
+
+        System.out.print(scaleLine + " ");
+
+
     }
 }
