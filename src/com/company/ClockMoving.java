@@ -125,7 +125,7 @@ class MovingClock extends JComponent implements ActionListener {
 //        int xPoly[] = {xPol-10,xPol+10, xPol, xPol-10, xPol+10, xPol};
 //        int yPoly[] = {y-20, y-20, y, y+20, y+20, y};
 
-
+        // изменение размера часов
         if (scaleLine%20 <= 9){
             int xPoly[] = {xPol-scaleLine%20-20,xPol+20+scaleLine%20, xPol, xPol-scaleLine%20-20, xPol+20+scaleLine%20, xPol};
             int yPoly[] = {y-scaleLine%20-10, y-scaleLine%20-10, y, y+scaleLine%20+10, y+scaleLine%20+10, y};
@@ -139,16 +139,10 @@ class MovingClock extends JComponent implements ActionListener {
             g2d.setColor(colorClock);
             g2d.draw(polygon);
         }
-
-
-
-
+        // меняем переменную для изменения размера часов не слишком быстро, а только раз в 10 пикселей
         if (x % 10 == 4){
             scaleLine++;
         }
-
-        System.out.print(scaleLine + " ");
-
 
     }
 }
