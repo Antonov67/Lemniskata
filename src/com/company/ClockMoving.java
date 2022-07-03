@@ -20,6 +20,7 @@ class MovingClock extends JComponent implements ActionListener {
     private Timer timer;
 
     private int radius;
+    private int angle = 0; // для поворота часов
 
     private int a = 70; // отступ слева
     private int b = 720; // ширина лемнискаты
@@ -125,23 +126,31 @@ class MovingClock extends JComponent implements ActionListener {
 //        int xPoly[] = {xPol-10,xPol+10, xPol, xPol-10, xPol+10, xPol};
 //        int yPoly[] = {y-20, y-20, y, y+20, y+20, y};
 
-        // изменение размера часов
+        // изменение размера и угла поворота часов
+
+        angle += 2;
+
         if (scaleLine%20 <= 9){
             int xPoly[] = {xPol-scaleLine%20-20,xPol+20+scaleLine%20, xPol, xPol-scaleLine%20-20, xPol+20+scaleLine%20, xPol};
-            int yPoly[] = {y-scaleLine%20-10, y-scaleLine%20-10, y, y+scaleLine%20+10, y+scaleLine%20+10, y};
+            int yPoly[] = {y-scaleLine%20-20, y-scaleLine%20-20, y, y+scaleLine%20+20, y+scaleLine%20+20, y};
             Polygon polygon = new Polygon(xPoly,yPoly,xPoly.length);
             g2d.setColor(colorClock);
+            g2d.rotate(Math.toRadians(angle),xPol,y); // повернем часы
             g2d.draw(polygon);
         }else {
             int xPoly[] = {xPol-38+scaleLine%20,xPol+38-scaleLine%20, xPol, xPol-38+scaleLine%20, xPol+38-scaleLine%20, xPol};
-            int yPoly[] = {y-28+scaleLine%20, y-28+scaleLine%20, y, y+28-scaleLine%20, y+28-scaleLine%20, y};
+            int yPoly[] = {y-39+scaleLine%20, y-39+scaleLine%20, y, y+39-scaleLine%20, y+39-scaleLine%20, y};
             Polygon polygon = new Polygon(xPoly,yPoly,xPoly.length);
             g2d.setColor(colorClock);
+            g2d.rotate(Math.toRadians(angle),xPol,y);  // повернем часы
             g2d.draw(polygon);
         }
+
+
         // меняем переменную для изменения размера часов не слишком быстро, а только раз в 10 пикселей
         if (x % 10 == 4){
             scaleLine++;
+
         }
 
     }
