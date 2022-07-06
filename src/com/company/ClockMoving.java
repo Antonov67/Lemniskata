@@ -9,12 +9,22 @@ import java.awt.geom.Line2D;
 class MovingClock extends JComponent implements ActionListener {
 
     private double scale;
-    private Color colorLem, colorClock;
+    private Color colorLem, colorClock; // цвета траектории и часов
+
+    private int lineWidth = 2; // толщина линии
 
     private int scaleLine = 0;
 
+    public void setColorLem(Color colorLem) {
+        this.colorLem = colorLem;
+    }
+
     public void setColorClock(Color colorClock) {
         this.colorClock = colorClock;
+    }
+
+    public void setLineWidth(int lineWidth) {
+        this.lineWidth = lineWidth;
     }
 
     private Timer timer;
@@ -90,7 +100,7 @@ class MovingClock extends JComponent implements ActionListener {
         }
         Polygon lemkiskata = new Polygon(xLemn,yLemn,xLemn.length); // создаем лемнискату
         g2d.setColor(colorLem); // задаем ее цвет
-        g2d.setStroke(new BasicStroke(2)); // толщина линий
+        g2d.setStroke(new BasicStroke(lineWidth)); // толщина линий
         // вертикальная ось
         Line2D line2D = new Line2D.Double(212, 300, 212, 100);
         g2d.draw(line2D);
@@ -129,7 +139,8 @@ class MovingClock extends JComponent implements ActionListener {
         // изменение размера и угла поворота часов
 
         angle += 2;
-
+  //      Stroke dashed = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
+  //      g2d.setStroke(dashed);
         if (scaleLine%20 <= 9){
             int xPoly[] = {xPol-scaleLine%20-20,xPol+20+scaleLine%20, xPol, xPol-scaleLine%20-20, xPol+20+scaleLine%20, xPol};
             int yPoly[] = {y-scaleLine%20-20, y-scaleLine%20-20, y, y+scaleLine%20+20, y+scaleLine%20+20, y};
@@ -141,14 +152,14 @@ class MovingClock extends JComponent implements ActionListener {
             int xPoly[] = {xPol-38+scaleLine%20,xPol+38-scaleLine%20, xPol, xPol-38+scaleLine%20, xPol+38-scaleLine%20, xPol};
             int yPoly[] = {y-39+scaleLine%20, y-39+scaleLine%20, y, y+39-scaleLine%20, y+39-scaleLine%20, y};
             Polygon polygon = new Polygon(xPoly,yPoly,xPoly.length);
+
             g2d.setColor(colorClock);
             g2d.rotate(Math.toRadians(angle),xPol,y);  // повернем часы
             g2d.draw(polygon);
         }
 
-
         // меняем переменную для изменения размера часов не слишком быстро, а только раз в 10 пикселей
-        if (x % 10 == 4){
+        if (x % 10 > 8){
             scaleLine++;
 
         }

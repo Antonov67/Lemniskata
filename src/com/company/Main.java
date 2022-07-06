@@ -22,15 +22,18 @@ public class Main {
                 panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
                 panel.add(movingClock);
                 frame.getContentPane().add(panel);
-                JComboBox comboBox = new JComboBox();
-                comboBox.addItem("Красный");
-                comboBox.addItem("Синий");
-                comboBox.addItem("Желтый");
-                comboBox.addItem("Зеленый");
-                comboBox.addActionListener(new ActionListener() {
+
+                // цвет часов
+                JLabel labelClock = new JLabel("Цвет часов");
+                JComboBox comboBoxClock = new JComboBox();
+                comboBoxClock.addItem("Красный");
+                comboBoxClock.addItem("Синий");
+                comboBoxClock.addItem("Желтый");
+                comboBoxClock.addItem("Зеленый");
+                comboBoxClock.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        switch (comboBox.getSelectedIndex()){
+                        switch (comboBoxClock.getSelectedIndex()){
                             case 0: movingClock.setColorClock(Color.RED);
                                 break;
                             case 1: movingClock.setColorClock(Color.BLUE);
@@ -38,6 +41,56 @@ public class Main {
                             case 2: movingClock.setColorClock(Color.YELLOW);
                                 break;
                             case 3: movingClock.setColorClock(Color.GREEN);
+                                break;
+
+                        }
+                    }
+                });
+
+                // цвет лемнискаты
+                JLabel labelLem = new JLabel("Цвет лемнискаты");
+                JComboBox comboBoxLem = new JComboBox();
+
+                comboBoxLem.addItem("Красный");
+                comboBoxLem.addItem("Синий");
+                comboBoxLem.addItem("Желтый");
+                comboBoxLem.addItem("Зеленый");
+                comboBoxLem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        switch (comboBoxLem.getSelectedIndex()){
+                            case 0: movingClock.setColorLem(Color.RED);
+                                break;
+                            case 1: movingClock.setColorLem(Color.BLUE);
+                                break;
+                            case 2: movingClock.setColorLem(Color.YELLOW);
+                                break;
+                            case 3: movingClock.setColorLem(Color.GREEN);
+                                break;
+
+                        }
+                    }
+                });
+
+                //толщина линий
+                JLabel labelLineWidth = new JLabel("Толщина линий");
+                JComboBox comboBoxLineWidth = new JComboBox();
+                comboBoxLineWidth.addItem("2");
+                comboBoxLineWidth.addItem("4");
+                comboBoxLineWidth.addItem("6");
+                comboBoxLineWidth.addItem("8");
+
+                comboBoxLineWidth.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        switch (comboBoxLineWidth.getSelectedIndex()){
+                            case 0: movingClock.setLineWidth(2);
+                                break;
+                            case 1: movingClock.setLineWidth(4);
+                                break;
+                            case 2: movingClock.setLineWidth(6);
+                                break;
+                            case 3: movingClock.setLineWidth(8);
                                 break;
 
                         }
@@ -60,10 +113,16 @@ public class Main {
                         }
                     }
                 });
-                panel.add(comboBox);
+                panel.add(labelClock);
+                panel.add(comboBoxClock);
+                panel.add(labelLem);
+                panel.add(comboBoxLem);
+                panel.add(labelLineWidth);
+                panel.add(comboBoxLineWidth);
+
                 panel.add(button);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(650, 500);
+                frame.setSize(650, 700);
                 frame.setVisible(true);
             }
         });
