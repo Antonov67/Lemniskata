@@ -15,6 +15,32 @@ class MovingClock extends JComponent implements ActionListener {
 
     private int scaleLine = 0;
 
+    private int stroke = 0; // тип линии
+
+    private int dirRotation = 1;
+
+    private int speedPulse = 2; // скорость пульсации
+
+    private int speedMoving = 1; // скорость движения
+
+    private int stepAngle = 2; // шаг изменения угла объекта при вращении
+
+    public void setStepAngle(int stepAngle) {
+        this.stepAngle = stepAngle;
+    }
+
+    public void setDirRotation(int dirRotation) {
+        this.dirRotation = dirRotation;
+    }
+
+    public void setSpeedPulse(int speedPulse) {
+        this.speedPulse = speedPulse;
+    }
+
+    public void setSpeedMoving(int speedMoving) {
+        this.speedMoving = speedMoving;
+    }
+
     public void setColorLem(Color colorLem) {
         this.colorLem = colorLem;
     }
@@ -25,6 +51,10 @@ class MovingClock extends JComponent implements ActionListener {
 
     public void setLineWidth(int lineWidth) {
         this.lineWidth = lineWidth;
+    }
+
+    public void setStroke(int stroke) {
+        this.stroke = stroke;
     }
 
     private Timer timer;
@@ -100,7 +130,24 @@ class MovingClock extends JComponent implements ActionListener {
         }
         Polygon lemkiskata = new Polygon(xLemn,yLemn,xLemn.length); // создаем лемнискату
         g2d.setColor(colorLem); // задаем ее цвет
-        g2d.setStroke(new BasicStroke(lineWidth)); // толщина линий
+
+        //толщина и тип линии
+        Stroke dashed;
+        switch (stroke){
+            case 1:
+                dashed = new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{1}, 0);
+                break;
+            case 5:
+                dashed = new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{5}, 0);
+                break;
+            case 9:
+                dashed = new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+                break;
+            default:
+                dashed = new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0);
+        }
+
+        g2d.setStroke(dashed);
         // вертикальная ось
         Line2D line2D = new Line2D.Double(212, 300, 212, 100);
         g2d.draw(line2D);
@@ -113,7 +160,7 @@ class MovingClock extends JComponent implements ActionListener {
         // рисуем часы
 
         int t; // вспомогательный параметр для адаптации системы координат
-        x++; // увеличиваем координату х, создаем движение часов
+        x+=speedMoving; // увеличиваем координату х, создаем движение часов
         int xPol = x; // вспомогательная переменная для отображения часов
         if (x >= a && x <= b/2 - 5){
             t = x - radius - a;
@@ -138,9 +185,13 @@ class MovingClock extends JComponent implements ActionListener {
 
         // изменение размера и угла поворота часов
 
-        angle += 2;
-  //      Stroke dashed = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
-  //      g2d.setStroke(dashed);
+        if (dirRotation == 1){
+            angle += stepAngle;
+        }else {
+            angle -= stepAngle;
+        }
+
+
         if (scaleLine%20 <= 9){
             int xPoly[] = {xPol-scaleLine%20-20,xPol+20+scaleLine%20, xPol, xPol-scaleLine%20-20, xPol+20+scaleLine%20, xPol};
             int yPoly[] = {y-scaleLine%20-20, y-scaleLine%20-20, y, y+scaleLine%20+20, y+scaleLine%20+20, y};
@@ -159,9 +210,8 @@ class MovingClock extends JComponent implements ActionListener {
         }
 
         // меняем переменную для изменения размера часов не слишком быстро, а только раз в 10 пикселей
-        if (x % 10 > 8){
+        if (x % 10 > speedPulse){
             scaleLine++;
-
         }
 
     }
