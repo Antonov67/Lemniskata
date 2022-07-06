@@ -17,13 +17,28 @@ class MovingClock extends JComponent implements ActionListener {
 
     private int stroke = 0; // тип линии
 
+    private String baseDot = "C"; // базовая точка вращения
+
     private int dirRotation = 1;
+
+    private int countRepeat = 0; // количество повторов прохождения траектории
+
+    private int totalCountRepeat = -1; // необходимое количество повторов
 
     private int speedPulse = 2; // скорость пульсации
 
     private int speedMoving = 1; // скорость движения
 
     private int stepAngle = 2; // шаг изменения угла объекта при вращении
+
+    public void setTotalCountRepeat(int totalCountRepeat) {
+        countRepeat = 0;
+        this.totalCountRepeat = totalCountRepeat;
+    }
+
+    public void setBaseDot(String baseDot) {
+        this.baseDot = baseDot;
+    }
 
     public void setStepAngle(int stepAngle) {
         this.stepAngle = stepAngle;
@@ -178,7 +193,11 @@ class MovingClock extends JComponent implements ActionListener {
         }
         if (x > (b-a-5)){
             x = a;
-        }
+            countRepeat++; // подсчитываем количество повторов
+            if (countRepeat == totalCountRepeat){
+                timer.stop(); // остановим вращение когда достигнуто нужное количество повторов
+            }
+         }
         // массивы координат точек часов
 //        int xPoly[] = {xPol-10,xPol+10, xPol, xPol-10, xPol+10, xPol};
 //        int yPoly[] = {y-20, y-20, y, y+20, y+20, y};
@@ -191,21 +210,71 @@ class MovingClock extends JComponent implements ActionListener {
             angle -= stepAngle;
         }
 
+        int xDot=0, yDot=0;
 
         if (scaleLine%20 <= 9){
             int xPoly[] = {xPol-scaleLine%20-20,xPol+20+scaleLine%20, xPol, xPol-scaleLine%20-20, xPol+20+scaleLine%20, xPol};
             int yPoly[] = {y-scaleLine%20-20, y-scaleLine%20-20, y, y+scaleLine%20+20, y+scaleLine%20+20, y};
             Polygon polygon = new Polygon(xPoly,yPoly,xPoly.length);
             g2d.setColor(colorClock);
-            g2d.rotate(Math.toRadians(angle),xPol,y); // повернем часы
+            switch (baseDot){
+                case "C":
+                    xDot = xPol;
+                    yDot = y;
+                    break;
+                case "LT":
+                    xDot = xPol-scaleLine%20-20;
+                    yDot = y-scaleLine%20-20;
+                    break;
+                case "RT":
+                    xDot = xPol+20+scaleLine%20;
+                    yDot = y-scaleLine%20-20;
+                    break;
+                case "RB":
+                    xDot = xPol+20+scaleLine%20;
+                    yDot = y+scaleLine%20+20;
+                    break;
+                case "LB":
+                    xDot = xPol-scaleLine%20-20;
+                    yDot = y+scaleLine%20+20;
+                    break;
+
+            }
+            g2d.rotate(Math.toRadians(angle),xDot,yDot); // повернем часы
+
             g2d.draw(polygon);
         }else {
             int xPoly[] = {xPol-38+scaleLine%20,xPol+38-scaleLine%20, xPol, xPol-38+scaleLine%20, xPol+38-scaleLine%20, xPol};
             int yPoly[] = {y-39+scaleLine%20, y-39+scaleLine%20, y, y+39-scaleLine%20, y+39-scaleLine%20, y};
             Polygon polygon = new Polygon(xPoly,yPoly,xPoly.length);
 
+            switch (baseDot){
+                case "C":
+                    xDot = xPol;
+                    yDot = y;
+                    break;
+                case "LT":
+                    xDot = xPol-38+scaleLine%20;
+                    yDot = y-39+scaleLine%20;
+                    break;
+                case "RT":
+                    xDot = xPol+38-scaleLine%20;
+                    yDot = y-scaleLine%20-20;
+                    break;
+                case "RB":
+                    xDot = xPol+38-scaleLine%20;
+                    yDot = y+39-scaleLine%20;
+                    break;
+                case "LB":
+                    xDot = xPol-38+scaleLine%20;
+                    yDot = y+39-scaleLine%20;
+                    break;
+
+            }
+
             g2d.setColor(colorClock);
-            g2d.rotate(Math.toRadians(angle),xPol,y);  // повернем часы
+            g2d.rotate(Math.toRadians(angle),xDot,yDot);  // повернем часы
+
             g2d.draw(polygon);
         }
 

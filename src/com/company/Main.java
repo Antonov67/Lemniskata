@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 public class Main {
 
@@ -149,6 +147,33 @@ public class Main {
                     }
                 });
 
+                // количество повторов
+                JLabel labelTotalRepeat = new JLabel("количество повторов");
+                JComboBox comboBoxTotalRepeat = new JComboBox();
+                comboBoxTotalRepeat.addItem("бесконечно");
+                comboBoxTotalRepeat.addItem("1");
+                comboBoxTotalRepeat.addItem("4");
+                comboBoxTotalRepeat.addItem("10");
+
+                comboBoxTotalRepeat.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        switch (comboBoxTotalRepeat.getSelectedIndex()){
+                            case 0: movingClock.setTotalCountRepeat(-1);
+                                break;
+                            case 1: movingClock.setTotalCountRepeat(1);
+                                break;
+                            case 2: movingClock.setTotalCountRepeat(4);
+                                break;
+                            case 3: movingClock.setTotalCountRepeat(10);
+                                break;
+
+                        }
+                    }
+                });
+
+
+
                 // скорость пульсации часов
                 JLabel labelPulseSpeed = new JLabel("Скорость пульсации часов");
                 JComboBox comboBoxPulseSpeed = new JComboBox();
@@ -218,6 +243,69 @@ public class Main {
                     }
                 });
 
+                // выбор опорной точки
+                JPanel panelRadioButton = new JPanel();
+                panelRadioButton.setLayout(new GridBagLayout());
+                GridBagConstraints constraints = new GridBagConstraints();
+
+
+
+                constraints.fill = GridBagConstraints.HORIZONTAL;
+                constraints.weightx = 0.5;
+
+
+                JRadioButton buttonLT = new JRadioButton("");
+                constraints.gridx = 0;
+                constraints.gridy = 0 ;
+
+                panelRadioButton.add(buttonLT, constraints);
+
+                JRadioButton buttonRT = new JRadioButton("");
+                constraints.gridy = 0;
+                constraints.gridx = 2;
+                panelRadioButton.add(buttonRT, constraints);
+
+                JRadioButton buttonC = new JRadioButton("");
+                constraints.ipady = 25;
+                constraints.gridy = 1;
+                constraints.gridx = 1;
+                panelRadioButton.add(buttonC, constraints);
+
+                JRadioButton buttonLB = new JRadioButton("");
+                constraints.gridy =4;
+                constraints.gridx = 0;
+                panelRadioButton.add(buttonLB, constraints);
+
+                JRadioButton buttonRB = new JRadioButton("");
+                constraints.gridy = 4;
+                constraints.gridx = 2;
+                panelRadioButton.add(buttonRB, constraints);
+
+                ButtonGroup group = new ButtonGroup();
+                group.add(buttonLB);
+                group.add(buttonRB);
+                group.add(buttonLT);
+                group.add(buttonC);
+                group.add(buttonRT);
+
+                ActionListener actionListener = new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(buttonC.isSelected()) movingClock.setBaseDot("C");
+                        if(buttonLT.isSelected()) movingClock.setBaseDot("LT");
+                        if(buttonRT.isSelected()) movingClock.setBaseDot("RT");
+                        if(buttonLB.isSelected()) movingClock.setBaseDot("LB");
+                        if(buttonRB.isSelected()) movingClock.setBaseDot("RB");
+                    }
+                };
+
+                buttonC.addActionListener(actionListener);
+                buttonLT.addActionListener(actionListener);
+                buttonRT.addActionListener(actionListener);
+                buttonLB.addActionListener(actionListener);
+                buttonRB.addActionListener(actionListener);
+
+
 
                 final JButton button = new JButton("Старт");
                 button.addActionListener(new ActionListener() {
@@ -251,6 +339,10 @@ public class Main {
                 panel.add(comboBoxDirRotation);
                 panel.add(labelStepAngle);
                 panel.add(comboBoxStepAngle);
+                panel.add(labelTotalRepeat);
+                panel.add(comboBoxTotalRepeat);
+                panel.add(new JLabel("выбор опорной точки вращения"));
+                panel.add(panelRadioButton);
 
                 panel.add(button);
                 mainPanel.add(panel);
