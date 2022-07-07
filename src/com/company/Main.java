@@ -218,6 +218,25 @@ public class Main {
                     }
                 });
 
+                // направление движения часов
+                JLabel labelMoveDir = new JLabel("Направление движения часов");
+                JComboBox comboBoxMoveDir = new JComboBox();
+                comboBoxMoveDir.addItem("Вправо");
+                comboBoxMoveDir.addItem("Влево");
+
+
+                comboBoxMoveDir.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        switch (comboBoxMoveDir.getSelectedIndex()){
+                            case 0: movingClock.setMoveDir(1);
+                                break;
+                            case 1: movingClock.setMoveDir(-1);
+                                break;
+                        }
+                    }
+                });
+
                 // шаг изменения угла объекта при вращении
                 JLabel labelStepAngle = new JLabel("Шаг изменения угла объекта при его вращении");
                 JComboBox comboBoxStepAngle = new JComboBox();
@@ -237,6 +256,34 @@ public class Main {
                             case 2: movingClock.setStepAngle(6);
                                 break;
                             case 3: movingClock.setStepAngle(8);
+                                break;
+
+                        }
+                    }
+                });
+
+                // масштаб линий
+                JLabel labelScale = new JLabel("Масштаб");
+                JComboBox comboBoxScale = new JComboBox();
+                comboBoxScale.addItem("0.5");
+                comboBoxScale.addItem("0.7");
+                comboBoxScale.addItem("0.9");
+                comboBoxScale.addItem("1.1");
+                comboBoxScale.addItem("1.5");
+
+                comboBoxScale.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        switch (comboBoxScale.getSelectedIndex()){
+                            case 0: movingClock.setScale(0.5);
+                                break;
+                            case 1: movingClock.setScale(0.7);
+                                break;
+                            case 2: movingClock.setScale(0.9);
+                                break;
+                            case 3: movingClock.setScale(1.1);
+                                break;
+                            case 4: movingClock.setScale(1.5);
                                 break;
 
                         }
@@ -341,6 +388,10 @@ public class Main {
                 panel.add(comboBoxStepAngle);
                 panel.add(labelTotalRepeat);
                 panel.add(comboBoxTotalRepeat);
+                panel.add(labelMoveDir);
+                panel.add(comboBoxMoveDir);
+                panel.add(labelScale);
+                panel.add(comboBoxScale);
                 panel.add(new JLabel("выбор опорной точки вращения"));
                 panel.add(panelRadioButton);
 

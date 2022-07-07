@@ -15,6 +15,9 @@ class MovingClock extends JComponent implements ActionListener {
 
     private int scaleLine = 0;
 
+    private int moveDir = 1; // направление движения
+    private boolean startMove = false;
+
     private int stroke = 0; // тип линии
 
     private String baseDot = "C"; // базовая точка вращения
@@ -34,6 +37,15 @@ class MovingClock extends JComponent implements ActionListener {
     public void setTotalCountRepeat(int totalCountRepeat) {
         countRepeat = 0;
         this.totalCountRepeat = totalCountRepeat;
+    }
+
+    public void setMoveDir(int moveDir) {
+        this.moveDir = moveDir;
+        this.startMove = true;
+    }
+
+    public void setScale(double scale) {
+        this.scale = scale;
     }
 
     public void setBaseDot(String baseDot) {
@@ -72,6 +84,10 @@ class MovingClock extends JComponent implements ActionListener {
         this.stroke = stroke;
     }
 
+    public void setScaleLine(int scaleLine) {
+        this.scaleLine = scaleLine;
+    }
+
     private Timer timer;
 
     private int radius;
@@ -88,7 +104,7 @@ class MovingClock extends JComponent implements ActionListener {
     public MovingClock(Color colorLem, Color colorClock, int delay, int radius) {
         this.radius = radius;
         c = (int) (radius / Math.sqrt(2));
-        scale = 1.2;
+        scale = 1.1;
         timer = new Timer(delay, this); // таймер для управления скорость анимации
         this.colorLem = colorLem;
         this.colorClock = colorClock;
@@ -110,6 +126,7 @@ class MovingClock extends JComponent implements ActionListener {
 
     @Override
     protected void paintComponent(Graphics g) {
+
         Graphics2D g2d = (Graphics2D) g;
         // нарисуем белый прямоугольник с черной границей - это область анимации
         g2d.setColor(Color.white);
@@ -175,7 +192,25 @@ class MovingClock extends JComponent implements ActionListener {
         // рисуем часы
 
         int t; // вспомогательный параметр для адаптации системы координат
-        x+=speedMoving; // увеличиваем координату х, создаем движение часов
+
+        if (moveDir == 1){
+            x+=speedMoving; // увеличиваем координату х, создаем движение часов вправо
+        }
+        else if (moveDir == -1) {
+            x-=speedMoving; // увеличиваем координату х, создаем движение часов влево
+        }
+
+        if (moveDir == 1 && startMove){
+            x = 70;
+            startMove = false;
+        }else if (moveDir == -1 && startMove){
+            x = 644;
+            startMove = false;
+        }
+
+
+
+
         int xPol = x; // вспомогательная переменная для отображения часов
         if (x >= a && x <= b/2 - 5){
             t = x - radius - a;
@@ -191,13 +226,21 @@ class MovingClock extends JComponent implements ActionListener {
 //            g2d.setColor(Color.BLACK);
 //            g2d.drawString("верх " + x, 10, 350);
         }
-        if (x > (b-a-5)){
-            x = a;
-            countRepeat++; // подсчитываем количество повторов
+        if (x > (b-a-5) && moveDir == 1){
+           x = a;
+           countRepeat++; // подсчитываем количество повторов
             if (countRepeat == totalCountRepeat){
                 timer.stop(); // остановим вращение когда достигнуто нужное количество повторов
             }
          }
+        if (x < a && moveDir == -1){
+            x = 644;
+            countRepeat++; // подсчитываем количество повторов
+            if (countRepeat == totalCountRepeat){
+                timer.stop(); // остановим вращение когда достигнуто нужное количество повторов
+            }
+        }
+
         // массивы координат точек часов
 //        int xPoly[] = {xPol-10,xPol+10, xPol, xPol-10, xPol+10, xPol};
 //        int yPoly[] = {y-20, y-20, y, y+20, y+20, y};
